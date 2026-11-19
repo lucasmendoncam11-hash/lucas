@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b1024" />
+    <title>Fuga Espacial — desvie dos meteoros</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script type="module" src="./main.js"></script>
+  </head>
+  <body>
+    <main class="layout">
+      <header class="topbar">
+        <a class="logo" href="./" aria-label="Fuga Espacial, início"><span class="logo-icon">✦</span> FUGA<span>ESPACIAL</span></a>
+        <span class="top-tag">UM JOGO DE REFLEXOS</span>
+      </header>
+
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="live-dot"></span> MISSÃO ATIVA</p>
+          <h1>O espaço não<br />espera por <em>ninguém.</em></h1>
+          <p class="subtitle">Pilote sua nave, desvie dos meteoros e sobreviva o máximo que puder.</p>
+        </div>
+        <div class="record-card">
+          <span class="record-label">SEU RECORDE</span>
+          <strong id="best-score">000</strong>
+          <span class="record-icon" aria-hidden="true">✧</span>
+        </div>
+      </section>
+
+      <section class="game-shell" aria-label="Jogo Fuga Espacial">
+        <div class="game-hud">
+          <div class="hud-item"><span>PONTUAÇÃO</span><strong id="score">000</strong></div>
+          <div class="hud-item"><span>VIDAS</span><strong id="lives" aria-label="3 vidas">♥ ♥ ♥</strong></div>
+          <button id="pause-button" class="pause-button" type="button" disabled aria-label="Pausar jogo">Ⅱ</button>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="game" width="800" height="480" aria-label="Nave espacial desviando de meteoros"></canvas>
+          <div id="overlay" class="overlay">
+            <div class="overlay-card">
+              <span id="overlay-icon" class="overlay-icon" aria-hidden="true">✦</span>
+              <p id="overlay-kicker" class="overlay-kicker">PRONTO PARA DECOLAR?</p>
+              <h2 id="overlay-title">Sua missão começa agora.</h2>
+              <p id="overlay-copy">Mova a nave para os lados e desvie dos meteoros.</p>
+              <button id="start-button" class="primary-button" type="button">Começar a jogar <span aria-hidden="true">↗</span></button>
+            </div>
+          </div>
+        </div>
+        <div class="game-bottom">
+          <span><kbd>←</kbd> <kbd>→</kbd> ou <kbd>A</kbd> <kbd>D</kbd> para mover</span>
+          <span>Arraste o dedo na tela para jogar no celular</span>
+        </div>
+      </section>
+
+      <footer class="footer">Feito para uma pausa divertida. <span>Boa viagem, piloto ✦</span></footer>
+    </main>
+  </body>
+</html>
