@@ -1,58 +1,1013 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#0b1024" />
-    <title>Fuga Espacial — desvie dos meteoros</title>
-    <link rel="stylesheet" href="./game/style.css" />
-    <script type="module" src="./game/main.js"></script>
-  </head>
-  <body>
-    <main class="layout">
-      <header class="topbar">
-        <a class="logo" href="./" aria-label="Fuga Espacial, início"><span class="logo-icon">✦</span> FUGA<span>ESPACIAL</span></a>
-        <span class="top-tag">UM JOGO DE REFLEXOS</span>
-      </header>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111735">
+  <title>NR Battle Royale — Missão Segurança</title>
+  <style>
+/* NR Battle Royale: original arcade interface, fully offline. */
+:root {
+  color-scheme: dark;
+  --ink: #090a25;
+  --deep: #0e123b;
+  --navy: #14194d;
+  --panel: #1d245b;
+  --panel-light: #29336f;
+  --line: #5767a1;
+  --white: #fffdf6;
+  --muted: #bac8ed;
+  --cyan: #53f1e0;
+  --yellow: #ffe35b;
+  --pink: #ff4f9c;
+  --orange: #ff9f45;
+  font-family: 'Trebuchet MS', 'Arial Rounded MT Bold', Arial, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+* { box-sizing: border-box; }
+html { min-height: 100%; }
+body {
+  min-height: 100vh;
+  margin: 0;
+  color: var(--white);
+  background:
+    radial-gradient(ellipse at 12% 8%, #7745c6 0%, transparent 30%),
+    radial-gradient(ellipse at 88% 34%, #1c86af 0%, transparent 32%),
+    radial-gradient(ellipse at 55% 100%, #3631a0 0%, transparent 42%),
+    #0a0d2d;
+}
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  content: '';
+  opacity: .25;
+  background-image: linear-gradient(#fff1 1px, transparent 1px), linear-gradient(90deg, #fff1 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(#000, transparent 75%);
+}
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: default; opacity: .55; }
+button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 3px;
+}
+input, select {
+  min-height: 43px;
+  padding: 10px 13px;
+  border: 2px solid #6576ae;
+  border-radius: 10px;
+  background: #101744;
+  color: var(--white);
+}
+input::placeholder { color: #a0add2; }
+label { font-weight: 800; }
+.hidden, [hidden] { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.shell { width: min(1250px, 100%); margin: auto; padding: 18px 24px 36px; }
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 0 18px;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--white);
+  text-decoration: none;
+  font-size: clamp(17px, 2vw, 25px);
+  font-weight: 1000;
+  letter-spacing: -.05em;
+  line-height: 1;
+  text-shadow: 0 3px 0 #171950;
+}
+.brand-mark, .brand-icon {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 42px;
+  height: 42px;
+  transform: rotate(-9deg);
+  border: 2px solid #ffeaa0;
+  border-radius: 11px;
+  background: linear-gradient(140deg, var(--yellow), var(--orange));
+  box-shadow: 0 5px 0 #ad583c, 0 10px 20px #0006;
+  color: #202149;
+  font-size: 25px;
+}
+.topbar-note, .top-tag { color: #d2dcff; font-size: 11px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 15px;
+  padding: 7px 12px;
+  border: 1px solid #74f8e6;
+  border-radius: 999px;
+  background: #063c64b8;
+  box-shadow: 0 0 20px #42edce44;
+  color: #a7fff0;
+  font-size: 11px;
+  font-weight: 1000;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr);
+  align-items: center;
+  min-height: 610px;
+  gap: 30px;
+  padding: 50px clamp(24px, 5vw, 70px) 70px;
+  overflow: hidden;
+  border: 3px solid #91a0ed;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 80% 25%, #3ac7e36e 0%, transparent 28%),
+    radial-gradient(circle at 45% 90%, #7a39d7aa 0%, transparent 45%),
+    linear-gradient(135deg, #18236a, #17265d 55%, #0e3267);
+  box-shadow: inset 0 2px 0 #ffffff80, 0 15px 0 #08113e, 0 28px 45px #0009;
+}
+.hero::before {
+  position: absolute;
+  inset: -80px -10%;
+  pointer-events: none;
+  content: '';
+  transform: rotate(-10deg);
+  opacity: .22;
+  background: repeating-linear-gradient(90deg, transparent 0 100px, #9af9ff 102px, transparent 104px 180px);
+}
+.hero::after {
+  position: absolute;
+  right: -75px;
+  bottom: -140px;
+  width: 570px;
+  height: 360px;
+  pointer-events: none;
+  content: '';
+  border: 26px solid #55e6df33;
+  border-radius: 50%;
+  transform: rotate(-20deg);
+}
+.hero-copy, .menu-card { position: relative; z-index: 1; }
+.hero-title {
+  max-width: 690px;
+  margin: 0;
+  color: var(--white);
+  font-size: clamp(52px, 7.5vw, 100px);
+  font-weight: 1000;
+  letter-spacing: -.075em;
+  line-height: .88;
+  text-transform: uppercase;
+  text-shadow: 0 5px 0 #542a93, 0 11px 0 #142050, 0 17px 20px #0009;
+}
+.hero-title span, .hero-title em { color: var(--yellow); font-style: normal; }
+.hero-subtitle { max-width: 560px; margin: 25px 0 0; color: #d9ecff; font-size: clamp(15px, 1.6vw, 20px); font-weight: 800; line-height: 1.4; }
+.hero-teacher, .hero-meta { margin: 23px 0 0; color: #b1c9f4; font-size: 13px; font-weight: 700; }
+.menu-card {
+  padding: clamp(21px, 3vw, 34px);
+  border: 2px solid #9dabec;
+  border-radius: 22px;
+  background: linear-gradient(145deg, #33458fe8, #161b55ed);
+  box-shadow: inset 0 2px 0 #ffffff52, 0 12px 0 #10144b, 0 22px 34px #0008;
+  backdrop-filter: blur(8px);
+}
+.menu-card h2, .panel h2, .modal h2 { margin: 0 0 12px; font-size: clamp(23px, 2.6vw, 34px); font-weight: 1000; letter-spacing: -.04em; }
+.menu-card p, .panel p, .modal p { color: var(--muted); line-height: 1.5; }
+.menu-card label { display: block; margin: 14px 0 7px; color: #ebedff; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
+.menu-card input, .menu-card select { width: 100%; }
+.menu-actions { display: grid; gap: 11px; margin-top: 20px; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 11px 18px;
+  border: 2px solid transparent;
+  border-radius: 11px;
+  color: var(--white);
+  font-size: 13px;
+  font-weight: 1000;
+  letter-spacing: .06em;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: transform .14s, box-shadow .14s, filter .14s;
+}
+.btn:hover:not(:disabled) { transform: translateY(-3px); filter: brightness(1.08); }
+.btn:active:not(:disabled) { transform: translateY(2px); box-shadow: none; }
+.btn-primary {
+  border-color: #fff5af;
+  background: linear-gradient(180deg, #fff786, #ffca41);
+  box-shadow: 0 6px 0 #9f6e34, 0 11px 20px #0006;
+  color: #252047;
+}
+.btn-ghost { border-color: #7189c2; background: #192959c9; box-shadow: 0 5px 0 #10163b; }
+.btn-cyan { border-color: #a8fff2; background: linear-gradient(180deg, #79f5e8, #28c8c6); box-shadow: 0 5px 0 #1b777e; color: #103449; }
+.button-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.game-screen { padding: 0; }
+.hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  min-height: 75px;
+  padding: 12px 18px;
+  border: 3px solid #7585d0;
+  border-bottom: 0;
+  border-radius: 20px 20px 0 0;
+  background: linear-gradient(180deg, #263a84, #182658);
+  box-shadow: inset 0 2px 0 #ffffff38;
+}
+.hud-stat, .stat { display: flex; flex-direction: column; gap: 2px; min-width: 74px; }
+.hud-stat span, .stat-label { color: #a8bdf4; font-size: 10px; font-weight: 1000; letter-spacing: .12em; text-transform: uppercase; }
+.hud-stat strong, .stat strong { color: var(--white); font-size: 21px; font-weight: 1000; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.hud .btn { min-height: 36px; padding: 6px 10px; font-size: 11px; }
+.health-track, .meter { width: 110px; height: 10px; overflow: hidden; border: 1px solid #99b2d3; border-radius: 999px; background: #101a47; }
+.health-fill, .meter-fill { height: 100%; background: linear-gradient(90deg, #3aecc5, #b0f66b); transition: width .25s; }
+.arena-wrap {
+  position: relative;
+  overflow: hidden;
+  border: 3px solid #7585d0;
+  background: #112d47;
+  box-shadow: 0 15px 0 #0a1246, 0 22px 35px #0009;
+}
+canvas#arena { display: block; width: 100%; aspect-ratio: 8 / 5; touch-action: none; }
+.bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+  padding: 13px 16px;
+  border: 2px solid #5869aa;
+  border-radius: 0 0 14px 14px;
+  background: #121c4bd9;
+  color: #cad8fb;
+  font-size: 12px;
+  font-weight: 700;
+}
+.pill { display: inline-flex; align-items: center; gap: 7px; padding: 6px 10px; border: 1px solid #77a0bd; border-radius: 999px; background: #0d375a; color: #cbfef7; font-size: 11px; font-weight: 900; }
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  overflow: auto;
+  background: #050823c9;
+  backdrop-filter: blur(9px);
+}
+.panel, .modal {
+  width: min(100%, 740px);
+  max-height: min(90vh, 900px);
+  overflow: auto;
+  padding: clamp(20px, 4vw, 35px);
+  border: 3px solid #9fb0ef;
+  border-radius: 20px;
+  background: linear-gradient(160deg, #293a89, #151d56 70%);
+  box-shadow: inset 0 2px 0 #ffffff55, 0 11px 0 #0a1246, 0 25px 70px #000b;
+}
+.panel-wide { width: min(100%, 940px); }
+.panel-header { display: flex; align-items: start; justify-content: space-between; gap: 15px; }
+.panel-header button { flex: none; }
+.panel h2, .modal h2 { color: #fff; }
+.panel h3, .modal h3 { margin: 18px 0 8px; color: #fff6a3; font-size: 16px; }
+.panel strong, .modal strong { color: #fff; }
+.modal-kicker { margin: 0 0 8px !important; color: #77f1e3 !important; font-size: 11px; font-weight: 1000; letter-spacing: .15em; text-transform: uppercase; }
+.choices { display: grid; gap: 9px; margin: 18px 0; }
+.choice {
+  width: 100%;
+  min-height: 52px;
+  padding: 12px 15px;
+  border: 2px solid #5a71b5;
+  border-radius: 10px;
+  background: #1a2b66;
+  color: #f7fbff;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: left;
+}
+.choice:hover:not(:disabled) { border-color: #9ff7e5; background: #284386; }
+.choice.correct { border-color: #6cf0b5; background: #145c5d; }
+.choice.wrong { border-color: #ff8798; background: #793457; }
+.choice:disabled { opacity: 1; cursor: default; }
+.feedback { margin: 13px 0; padding: 12px 14px; border-left: 4px solid var(--cyan); border-radius: 7px; background: #0d3561; color: #e3f8f8; line-height: 1.5; }
+.feedback.error { border-color: #ff889d; background: #5e2c57; }
+.settings-grid, .summary-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 20px 0; }
+.settings-grid label { display: grid; gap: 6px; color: #cfdefb; font-size: 12px; font-weight: 900; }
+.settings-grid input, .settings-grid select { width: 100%; }
+.check-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 14px; margin: 13px 0; }
+.check-grid label { display: flex; align-items: center; gap: 9px; color: #eef2ff; font-size: 13px; font-weight: 700; }
+.check-grid input { width: auto; min-height: 0; accent-color: #62e5d8; }
+.table-wrap { max-width: 100%; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; color: #f2f7ff; font-size: 12px; }
+th, td { padding: 9px 8px; border-bottom: 1px solid #5d70a6; text-align: left; }
+th { color: #9af8e9; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
+.summary-card { padding: 14px; border: 1px solid #6d85bb; border-radius: 10px; background: #16295d; }
+.summary-card span { display: block; margin-bottom: 6px; color: #a7c4eb; font-size: 11px; font-weight: 900; text-transform: uppercase; }
+.summary-card strong { font-size: 23px; }
+.mobile-controls { display: none; align-items: end; justify-content: space-between; gap: 10px; margin-top: 17px; user-select: none; touch-action: none; }
+.dpad { display: grid; grid-template-columns: repeat(3, 46px); grid-template-rows: repeat(3, 46px); gap: 3px; }
+.dpad button, .action-btn { display: grid; place-items: center; border: 2px solid #b3c2f9; border-radius: 12px; background: linear-gradient(145deg, #435bb0, #273878); box-shadow: 0 4px 0 #101941; color: #fff; font-size: 20px; font-weight: 1000; touch-action: none; }
+.dpad button:active, .action-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #101941; }
+.dpad [data-dir="up"] { grid-column: 2; grid-row: 1; }
+.dpad [data-dir="left"] { grid-column: 1; grid-row: 2; }
+.dpad [data-dir="right"] { grid-column: 3; grid-row: 2; }
+.dpad [data-dir="down"] { grid-column: 2; grid-row: 3; }
+.mobile-actions { display: flex; gap: 9px; align-items: end; }
+.action-btn { min-width: 79px; height: 62px; padding: 7px; font-size: 11px; letter-spacing: .03em; text-align: center; text-transform: uppercase; }
+.action-btn.interact { border-color: #fff6ab; background: linear-gradient(#ffe56c, #e99c3c); color: #30204a; }
+.action-btn.correct-risk { border-color: #a8f8ed; background: linear-gradient(#74f1e0, #1aa8b2); color: #173456; }
+.help-list { margin: 15px 0; padding-left: 21px; color: #d9e5ff; line-height: 1.65; }
+.credit { margin: 25px 3px 0; color: #a9b8e0; font-size: 11px; }
+@media (hover: none), (pointer: coarse) { .mobile-controls { display: flex; } }
+@media (max-width: 800px) {
+  .shell { padding: 12px 12px 28px; }
+  .hero { grid-template-columns: 1fr; min-height: auto; gap: 25px; padding: 34px 23px 45px; }
+  .hero-title { font-size: clamp(51px, 11vw, 80px); }
+  .topbar-note, .top-tag { display: none; }
+  .hud { gap: 8px; padding: 10px; }
+  .hud-stat, .stat { min-width: 62px; }
+  .hud-stat strong, .stat strong { font-size: 16px; }
+  .hud-stat span, .stat-label { font-size: 8px; }
+}
+@media (max-width: 560px) {
+  .hero { padding: 28px 16px 39px; }
+  .hero-title { font-size: clamp(47px, 13vw, 66px); }
+  .hero-subtitle { font-size: 14px; }
+  .menu-card { padding: 18px; }
+  .panel, .modal { padding: 19px; }
+  .settings-grid, .summary-grid, .check-grid { grid-template-columns: 1fr; }
+  .bottom-bar { font-size: 10px; }
+  .dpad { grid-template-columns: repeat(3, 40px); grid-template-rows: repeat(3, 40px); }
+  .action-btn { min-width: 64px; height: 57px; font-size: 9px; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
 
-      <section class="hero">
+/* Layout and controls used by the single-file edition. */
+.top-status { color: #b8c8f4; font-size: 11px; font-weight: 800; letter-spacing: .07em; }
+.status-dot { display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: #63efd1; box-shadow: 0 0 12px #63efd1; }
+.hero { min-height: 640px; }
+.hero-copy { min-width: 0; }
+.hero-title { max-width: 625px; font-size: clamp(39px, 4.3vw, 62px); line-height: 1.04; letter-spacing: -.055em; }
+.hero-description { max-width: 520px; margin: 24px 0 0; color: #d9e8ff; font-size: 16px; line-height: 1.55; }
+.hero-stats { display: flex; flex-wrap: wrap; gap: 23px; margin-top: 32px; }
+.hero-stats div { display: flex; flex-direction: column; gap: 5px; min-width: 80px; }
+.hero-stats b { color: #fff3a2; font-size: 26px; line-height: 1; }
+.hero-stats span { color: #b6cbf2; font-size: 10px; font-weight: 900; letter-spacing: .12em; }
+.teacher { margin: 34px 0 0; color: #aec6ec; font-size: 11px; font-weight: 800; letter-spacing: .08em; }
+.teacher strong { color: white; }
+.menu-art { position: relative; height: 103px; margin: -6px 0 8px; overflow: hidden; }
+.art-orbit { position: absolute; left: 50%; top: 50%; width: 180px; height: 60px; border: 2px solid #62eee0a6; border-radius: 50%; transform: translate(-50%, -50%) rotate(-25deg); }
+.orbit-two { width: 105px; height: 105px; border-color: #ffe276a3; transform: translate(-50%, -50%) rotate(28deg); }
+.art-shield { position: absolute; left: 50%; top: 50%; display: grid; place-items: center; width: 76px; height: 76px; border: 3px solid #f6e784; border-radius: 20px; background: linear-gradient(140deg, #ffe56d, #ff8f6c); box-shadow: 0 8px 0 #7c3a6b, 0 0 30px #ffce6e8c; color: #342357; font-size: 37px; transform: translate(-50%, -50%) rotate(-10deg); }
+.art-spark { position: absolute; color: #92fff2; font-size: 20px; }.spark-one { left: 18%; top: 23%; }.spark-two { right: 19%; bottom: 15%; }
+.menu-card #play { width: 100%; margin-top: 12px; }
+.menu-card input { padding: 12px 14px; border: 2px solid #7186bb; border-radius: 9px; background: #111a47; color: white; }
+.card-kicker { color: #9af8e9 !important; font-size: 11px; font-weight: 900; letter-spacing: .12em; }
+.hud-block { display: flex; flex-direction: column; gap: 4px; min-width: 78px; }
+.hud-block small { color: #a8bdf4; font-size: 10px; font-weight: 900; letter-spacing: .1em; }
+.hud-block strong { font-size: 20px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.health, .zone-meter { width: 100px; height: 9px; overflow: hidden; border: 1px solid #92aacb; border-radius: 999px; background: #111a47; }
+#health-fill, #zone-fill { display: block; height: 100%; background: #62eecb; }
+.canvas-hint { position: absolute; left: 50%; bottom: 15px; max-width: 90%; padding: 8px 13px; border: 1px solid #90a8d1; border-radius: 20px; background: #091735c9; color: #e9f2ff; font-size: 12px; font-weight: 700; text-align: center; transform: translateX(-50%); pointer-events: none; }
+.bottom-bar > div:first-child { display: flex; align-items: center; gap: 10px; }
+#region-nr { padding: 6px 9px; border-radius: 7px; background: #1b6378; color: #b9fff5; font-size: 11px; }
+#region-title { color: white; font-size: 13px; }
+#region-progress { color: #a5bbdb; font-size: 11px; }
+.zone-state { display: flex; align-items: center; gap: 10px; }
+.zone-state > span { color: #ff9bbd; font-size: 11px; font-weight: 900; }
+#zone-fill { background: #f574ab; }
+.minimap-frame { overflow: hidden; border: 1px solid #7f9cc4; border-radius: 7px; }
+.minimap-frame canvas { display: block; width: 140px; height: 84px; }
+.site-footer { display: flex; justify-content: space-between; gap: 16px; padding: 25px 2px 0; color: #a9b8e0; font-size: 11px; }
+.close-btn { float: right; width: 30px; height: 30px; padding: 0; border: 1px solid #91a5d1; border-radius: 7px; background: #2f3d78; color: white; font-size: 20px; }
+.panel .eyebrow { color: #75f7e8; font-size: 11px; font-weight: 900; letter-spacing: .12em; }
+.panel-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.panel-actions .btn { flex: 1 1 170px; }
+.panel label:not(.nr-check) { display: block; margin: 13px 0 6px; font-size: 12px; font-weight: 800; }
+.panel select { width: 100%; padding: 11px; border: 1px solid #8da6d6; border-radius: 7px; background: #17265b; color: white; }
+.nr-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; margin: 11px 0 19px; }
+.nr-check { display: flex; align-items: center; gap: 7px; padding: 8px 9px; border: 1px solid #5d74aa; border-radius: 8px; font-size: 12px; }
+.nr-check input { accent-color: #69e9d3; }
+.settings-label { margin: 18px 0 4px !important; font-weight: 800; }
+.choice b { display: inline-grid; place-items: center; width: 24px; height: 24px; margin-right: 6px; border-radius: 5px; background: #6075b2; }
+.answer-feedback { margin: 14px 0; padding: 15px; border-left: 4px solid #70eebd; border-radius: 9px; background: #153f59; }
+.answer-feedback.wrong { border-color: #ff8098; background: #513057; }
+.answer-feedback p { margin: 8px 0 14px; }
+.mission-note { font-size: 12px; }
+.result-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin: 20px 0; }
+.result-grid div { display: flex; flex-direction: column; gap: 5px; padding: 13px; border: 1px solid #6a82b5; border-radius: 9px; background: #182b62; }
+.result-grid b { color: #fff0a0; font-size: 23px; }.result-grid span { color: #acbee3; font-size: 10px; font-weight: 900; letter-spacing: .08em; }
+.rank-list { display: grid; gap: 8px; max-height: 330px; overflow: auto; }.rank-row { display: flex; justify-content: space-between; gap: 12px; padding: 12px; border: 1px solid #6076b2; border-radius: 8px; background: #17265b; font-size: 13px; }
+.review-item { margin: 12px 0; padding: 13px; border: 1px solid #637bb7; border-radius: 8px; background: #17265b; }.review-item p { margin: 7px 0; }
+.toast { position: fixed; z-index: 40; left: 50%; bottom: 22px; max-width: min(90vw, 520px); padding: 11px 17px; border: 1px solid #8ceee4; border-radius: 10px; background: #103f59; box-shadow: 0 7px 25px #0007; color: white; font-size: 13px; font-weight: 800; text-align: center; transform: translateX(-50%); }
+@media (max-width: 800px) { .hero-title { font-size: clamp(42px, 8vw, 67px); } .hero { min-height: 0; } .bottom-bar > div:first-child { flex-wrap: wrap; } .header-teacher { display: none; } }
+@media (max-width: 560px) { .hero-title { font-size: clamp(37px, 10vw, 51px); } .hero-description { font-size: 14px; } .hero-stats { gap: 16px; } .hud-block { min-width: 62px; } .hud-block strong { font-size: 16px; } .hud-block small { font-size: 8px; } .canvas-hint { display: none; } .nr-grid { grid-template-columns: 1fr; } .rank-row { flex-direction: column; } .site-footer { flex-direction: column; gap: 4px; } .bottom-bar { gap: 8px; } .minimap-frame canvas { width: 92px; height: 55px; } }
+
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-icon">✦</span><span>NR <b>BATTLE ROYALE</b></span></div>
+      <div class="top-status"><span class="status-dot"></span> MISSÃO SEGURANÇA <span class="header-teacher">· Educadora Gilza Simão</span></div>
+    </header>
+
+    <main>
+      <section id="home" class="hero screen">
         <div class="hero-copy">
-          <p class="eyebrow"><span class="live-dot"></span> MISSÃO ATIVA</p>
-          <h1>O espaço não<br />espera por <em>ninguém.</em></h1>
-          <p class="subtitle">Pilote sua nave, desvie dos meteoros e sobreviva o máximo que puder.</p>
+          <p class="eyebrow">UM JOGO EDUCATIVO DE SOBREVIVÊNCIA</p>
+          <h1 class="hero-title">O perigo está<br>em toda parte<span>.</span><br><em>A prevenção também.</em></h1>
+          <p class="hero-description">Explore seis ambientes, identifique riscos e tome decisões seguras antes que a zona de perigo avance.</p>
+          <div class="hero-stats"><div><b>06</b><span>REGIÕES</span></div><div><b>30</b><span>MISSÕES</span></div><div><b>03</b><span>NÍVEIS</span></div></div>
+          <p class="teacher">EDUCADORA <strong>GILZA SIMÃO</strong></p>
         </div>
-        <div class="record-card">
-          <span class="record-label">SEU RECORDE</span>
-          <strong id="best-score">000</strong>
-          <span class="record-icon" aria-hidden="true">✧</span>
-        </div>
-      </section>
-
-      <section class="game-shell" aria-label="Jogo Fuga Espacial">
-        <div class="game-hud">
-          <div class="hud-item"><span>PONTUAÇÃO</span><strong id="score">000</strong></div>
-          <div class="hud-item"><span>VIDAS</span><strong id="lives" aria-label="3 vidas">♥ ♥ ♥</strong></div>
-          <button id="pause-button" class="pause-button" type="button" disabled aria-label="Pausar jogo">Ⅱ</button>
-        </div>
-        <div class="canvas-wrap">
-          <canvas id="game" width="800" height="480" aria-label="Nave espacial desviando de meteoros"></canvas>
-          <div id="overlay" class="overlay">
-            <div class="overlay-card">
-              <span id="overlay-icon" class="overlay-icon" aria-hidden="true">✦</span>
-              <p id="overlay-kicker" class="overlay-kicker">PRONTO PARA DECOLAR?</p>
-              <h2 id="overlay-title">Sua missão começa agora.</h2>
-              <p id="overlay-copy">Mova a nave para os lados e desvie dos meteoros.</p>
-              <button id="start-button" class="primary-button" type="button">Começar a jogar <span aria-hidden="true">↗</span></button>
-            </div>
+        <div class="menu-card">
+          <div class="menu-art" aria-hidden="true"><div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div><div class="art-shield">✦</div><span class="art-spark spark-one">✳</span><span class="art-spark spark-two">✦</span></div>
+          <div class="card-content"><p class="card-kicker">PRONTO PARA A MISSÃO?</p><h2>Seu nome, agente.</h2><label for="nickname">NOME OU APELIDO</label><input id="nickname" maxlength="22" placeholder="Como vamos chamar você?" autocomplete="nickname">
+            <button id="play" class="btn btn-primary">JOGAR AGORA <span>↗</span></button>
+            <div class="menu-actions"><button class="btn btn-ghost" data-open="howto">COMO JOGAR</button><button class="btn btn-ghost" data-open="ranking">RANKING</button><button class="btn btn-ghost" data-open="settings">CONFIGURAÇÕES</button></div>
           </div>
         </div>
-        <div class="game-bottom">
-          <span><kbd>←</kbd> <kbd>→</kbd> ou <kbd>A</kbd> <kbd>D</kbd> para mover</span>
-          <span>Arraste o dedo na tela para jogar no celular</span>
-        </div>
       </section>
 
-      <footer class="footer">Feito para uma pausa divertida. <span>Boa viagem, piloto ✦</span></footer>
+      <section id="game-screen" class="game-screen screen hidden" aria-label="Partida NR Battle Royale">
+        <div class="hud"><div class="hud-block"><small>AGENTE</small><strong id="hud-name">—</strong></div><div class="hud-block"><small>REGIÃO</small><strong id="hud-region">—</strong></div><div class="hud-block"><small>PONTOS</small><strong id="hud-score">0</strong></div><div class="hud-block"><small>TEMPO</small><strong id="hud-time">00:00</strong></div><div class="hud-block"><small>SEGURANÇA</small><div class="health"><div id="health-fill"></div></div><strong id="hud-health">100%</strong></div><button id="pause" class="btn btn-small" title="Pausar">Ⅱ PAUSAR</button></div>
+        <div class="arena-wrap"><canvas id="arena" width="960" height="600" aria-label="Mapa do jogo visto de cima"></canvas><div class="canvas-hint" id="canvas-hint">Use WASD ou as setas para mover · E para interagir</div></div>
+        <div class="bottom-bar"><div><span id="region-nr">NR-17</span><strong id="region-title">Escritório</strong><small id="region-progress">0/5 missões</small></div><div class="zone-state"><span>◉ ZONA SEGURA</span><div class="zone-meter"><div id="zone-fill"></div></div></div><div class="minimap-frame"><canvas id="minimap" width="140" height="84" aria-label="Minimapa"></canvas></div></div>
+        <div class="mobile-controls" aria-label="Controles móveis"><div class="dpad"><button data-dir="up" aria-label="Mover para cima">▲</button><button data-dir="left" aria-label="Mover para esquerda">◀</button><button data-dir="down" aria-label="Mover para baixo">▼</button><button data-dir="right" aria-label="Mover para direita">▶</button></div><div class="mobile-actions"><button id="mobile-interact" class="action-btn interact">INTERAGIR</button><button id="mobile-correct" class="action-btn correct-risk">CORRIGIR RISCO</button></div></div>
+      </section>
     </main>
-  </body>
+    <footer class="site-footer">MISSÃO SEGURANÇA — SOBREVIVA AOS RISCOS! <span>Aprender a prevenir também é vencer.</span></footer>
+  </div>
+
+  <div id="overlay" class="overlay hidden" role="presentation"><div class="panel" role="dialog" aria-modal="true" aria-labelledby="panel-title"><button id="close-panel" class="close-btn" aria-label="Fechar">×</button><div id="panel-content"></div></div></div>
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <script>
+const MISSIONS = [{"id": "nr17-01", "region": "Ergonomia", "nr": "NR-17", "level": 1, "title": "Tela fora de posição", "scenario": "Uma pessoa precisa torcer o pescoço para enxergar a tela durante todo o turno.", "options": ["Solicitar ajuste da tela e avaliação do posto.", "Aumentar o brilho e manter a posição.", "Ignorar até a próxima troca de computador.", "Aproximar o rosto da tela."], "correct": 0, "explanation": "Adequar o posto à atividade ajuda a reduzir esforços desnecessários."}, {"id": "nr17-02", "region": "Ergonomia", "nr": "NR-17", "level": 1, "title": "Desconforto recorrente", "scenario": "Uma colega relata desconforto frequente ao usar o mesmo posto de atendimento.", "options": ["Dizer que é normal e seguir trabalhando.", "Trocar de cadeira sem verificar o restante do posto.", "Registrar o relato e pedir avaliação das condições de trabalho.", "Pedir que ela trabalhe mais rápido."], "correct": 2, "explanation": "O relato deve orientar a avaliação do trabalho e possíveis ajustes."}, {"id": "nr17-03", "region": "Ergonomia", "nr": "NR-17", "level": 2, "title": "Rotina repetitiva", "scenario": "Uma nova tarefa exige movimentos repetidos por longos períodos.", "options": ["Esperar aparecer uma lesão para avaliar.", "Rever a organização da tarefa e as medidas previstas na avaliação ergonômica.", "Manter o ritmo sem pausas para terminar cedo.", "Deixar cada pessoa improvisar sua própria solução."], "correct": 1, "explanation": "A organização do trabalho também influencia a carga física e deve ser avaliada."}, {"id": "nr17-04", "region": "Ergonomia", "nr": "NR-17", "level": 2, "title": "Posto compartilhado", "scenario": "Pessoas de alturas diferentes usam a mesma bancada em turnos alternados.", "options": ["Fixar tudo na posição da primeira pessoa.", "Pedir que a equipe se adapte sem ajustes.", "Retirar a bancada do setor sem consultar ninguém.", "Verificar possibilidades de ajuste e orientar cada usuário."], "correct": 3, "explanation": "Um posto compartilhado precisa atender às características de quem o utiliza."}, {"id": "nr17-05", "region": "Ergonomia", "nr": "NR-17", "level": 3, "title": "Mudança de metas", "scenario": "Após uma mudança nas metas, aumentam as queixas de cansaço e erros.", "options": ["Reavaliar ritmo, exigências e condições reais da atividade com a equipe.", "Cobrar mais atenção individual sem examinar o trabalho.", "Eliminar todas as pausas para reduzir atrasos.", "Atribuir as queixas apenas à falta de motivação."], "correct": 0, "explanation": "Mudanças no ritmo e na organização merecem nova análise das condições de trabalho."}, {"id": "nr6-01", "region": "Proteção individual", "nr": "NR-6", "level": 1, "title": "EPI para tarefa nova", "scenario": "Uma pessoa vai iniciar uma tarefa com riscos diferentes dos habituais.", "options": ["Escolher o EPI que um colega costuma usar.", "Usar qualquer EPI disponível no armário.", "Consultar a avaliação dos riscos e a orientação de uso.", "Dispensar o EPI porque a tarefa será breve."], "correct": 2, "explanation": "A proteção individual precisa ser adequada aos riscos da atividade."}, {"id": "nr6-02", "region": "Proteção individual", "nr": "NR-6", "level": 1, "title": "Luva danificada", "scenario": "Uma luva de proteção apresenta um rasgo antes do início do trabalho.", "options": ["Substituir a luva e comunicar o problema.", "Cobrir o rasgo com fita e continuar.", "Usar a luva apenas na mão menos exposta.", "Guardar a luva para outra pessoa usar."], "correct": 0, "explanation": "Um EPI danificado pode deixar de oferecer a proteção esperada."}, {"id": "nr6-03", "region": "Proteção individual", "nr": "NR-6", "level": 2, "title": "Primeiro uso", "scenario": "Um trabalhador recebeu um EPI que nunca utilizou.", "options": ["Aprender observando à distância.", "Usar apenas quando um fiscal estiver perto.", "Guardar o EPI até descobrir sozinho como funciona.", "Pedir orientação sobre ajuste, uso, conservação e limites."], "correct": 3, "explanation": "A orientação permite usar o equipamento da forma prevista e reconhecer seus limites."}, {"id": "nr6-04", "region": "Proteção individual", "nr": "NR-6", "level": 2, "title": "Proteções incompatíveis", "scenario": "Dois EPIs necessários parecem atrapalhar o ajuste um do outro.", "options": ["Escolher só o mais confortável.", "Pedir avaliação de compatibilidade antes de seguir.", "Afrouxar os dois para caberem juntos.", "Ignorar o ajuste durante tarefas curtas."], "correct": 1, "explanation": "As proteções devem funcionar em conjunto sem comprometer seu ajuste."}, {"id": "nr6-05", "region": "Proteção individual", "nr": "NR-6", "level": 3, "title": "Barreira coletiva falhou", "scenario": "Uma barreira de proteção coletiva está danificada, embora a equipe ainda use EPI.", "options": ["Continuar normalmente porque o EPI substitui a barreira.", "Retirar o EPI para perceber melhor o risco.", "Comunicar a falha e seguir o procedimento para controlar o risco.", "Esperar a próxima inspeção de rotina sem avisar."], "correct": 2, "explanation": "O EPI não elimina a necessidade de controlar o risco na fonte e manter outras proteções."}, {"id": "nr11-01", "region": "Movimentação de materiais", "nr": "NR-11", "level": 1, "title": "Carga sem identificação", "scenario": "Uma carga precisa ser movimentada, mas seu peso não está claro.", "options": ["Levantar um pouco para estimar o peso.", "Confirmar dados da carga e capacidade do equipamento antes da operação.", "Pedir que mais pessoas segurem a carga durante o trajeto.", "Usar o equipamento mais próximo sem verificar sua capacidade."], "correct": 1, "explanation": "Informações da carga e do equipamento são necessárias para planejar a movimentação."}, {"id": "nr11-02", "region": "Movimentação de materiais", "nr": "NR-11", "level": 1, "title": "Pedestres na rota", "scenario": "Pedestres atravessam a rota usada por um veículo de movimentação.", "options": ["Organizar circulação e sinalização para separar o fluxo de pessoas e veículos.", "Pedir que pedestres corram ao atravessar.", "Confiar apenas na buzina do veículo.", "Aumentar a velocidade para liberar a rota."], "correct": 0, "explanation": "Rotas claras e circulação organizada reduzem o risco de encontros perigosos."}, {"id": "nr11-03", "region": "Movimentação de materiais", "nr": "NR-11", "level": 2, "title": "Carga instável", "scenario": "Uma carga parece inclinada antes do transporte.", "options": ["Transportar devagar para compensar.", "Pedir que alguém segure a carga ao lado.", "Manter a rota e corrigir depois.", "Interromper a operação e solicitar estabilização conforme o procedimento."], "correct": 3, "explanation": "Uma carga instável deve ser avaliada antes de continuar a movimentação."}, {"id": "nr11-04", "region": "Movimentação de materiais", "nr": "NR-11", "level": 2, "title": "Equipamento desconhecido", "scenario": "Um operador experiente recebe um equipamento de movimentação que nunca utilizou.", "options": ["Operar normalmente porque equipamentos são semelhantes.", "Obter orientação e autorização adequadas para aquele equipamento.", "Aprender durante uma carga leve.", "Pedir a um colega que explique apenas os comandos principais."], "correct": 1, "explanation": "Familiaridade com outra máquina não substitui orientação para o equipamento específico."}, {"id": "nr11-05", "region": "Movimentação de materiais", "nr": "NR-11", "level": 3, "title": "Saída obstruída", "scenario": "Materiais foram deixados na rota de circulação e perto da saída do setor.", "options": ["Desviar os veículos pelo espaço dos pedestres.", "Empilhar mais alto para liberar parte do piso.", "Organizar a retirada e manter rotas e saídas desobstruídas.", "Deixar como está até o fim do turno."], "correct": 2, "explanation": "A movimentação deve preservar circulação segura e acesso às saídas."}, {"id": "nr10-01", "region": "Segurança elétrica", "nr": "NR-10", "level": 1, "title": "Cabo danificado", "scenario": "Uma pessoa nota isolamento danificado em um cabo de equipamento.", "options": ["Deixar de usar o equipamento e comunicar para avaliação por pessoal autorizado.", "Cobrir o dano com fita e continuar.", "Puxar o cabo pelo fio para testar.", "Esperar o cabo falhar por completo."], "correct": 0, "explanation": "Danos visíveis exigem avaliação antes de novo uso."}, {"id": "nr10-02", "region": "Segurança elétrica", "nr": "NR-10", "level": 1, "title": "Sinal no painel", "scenario": "Surge um cheiro incomum perto de um painel elétrico.", "options": ["Abrir o painel para localizar o defeito.", "Borrifar água para resfriar a área.", "Afastar-se e comunicar imediatamente à equipe autorizada.", "Desligar componentes internos sem orientação."], "correct": 2, "explanation": "Sinais de anormalidade devem ser tratados por pessoas autorizadas, seguindo os procedimentos."}, {"id": "nr10-03", "region": "Segurança elétrica", "nr": "NR-10", "level": 2, "title": "Manutenção planejada", "scenario": "Há necessidade de manutenção em um equipamento elétrico.", "options": ["Permitir que qualquer colega faça o serviço se for rápido.", "Encaminhar a atividade a profissionais autorizados, com análise e procedimentos de segurança.", "Improvisar ferramentas para evitar atraso.", "Dispensar o planejamento porque a falha já foi identificada."], "correct": 1, "explanation": "A intervenção elétrica requer profissionais habilitados para a atividade e controles planejados."}, {"id": "nr10-04", "region": "Segurança elétrica", "nr": "NR-10", "level": 2, "title": "Umidade próxima", "scenario": "A equipe observa água perto de uma tomada usada por um equipamento.", "options": ["Continuar usando com as mãos secas.", "Cobrir a tomada com papel.", "Pedir que alguém teste se ainda funciona.", "Interromper o uso e solicitar avaliação da condição insegura."], "correct": 3, "explanation": "Água próxima à instalação elétrica exige controle do risco antes do uso."}, {"id": "nr10-05", "region": "Segurança elétrica", "nr": "NR-10", "level": 3, "title": "Alteração de circuito", "scenario": "Uma mudança no processo exige alterar a instalação elétrica do setor.", "options": ["Solicitar avaliação técnica e atualização dos controles antes da mudança.", "Aproveitar uma tomada livre sem avaliar a instalação.", "Fazer uma ligação temporária por tempo indeterminado.", "Deixar a documentação antiga, pois a mudança é pequena."], "correct": 0, "explanation": "Mudanças na instalação precisam ser planejadas e avaliadas por profissionais competentes."}, {"id": "nr12-01", "region": "Segurança de máquinas", "nr": "NR-12", "level": 1, "title": "Proteção ausente", "scenario": "Uma proteção de máquina foi removida e ainda não foi recolocada.", "options": ["Operar com mais atenção.", "Não operar e comunicar a ausência da proteção.", "Usar luvas como substituição da proteção.", "Pedir a outra pessoa que vigie a área exposta."], "correct": 1, "explanation": "A máquina deve operar com as proteções previstas em condições adequadas."}, {"id": "nr12-02", "region": "Segurança de máquinas", "nr": "NR-12", "level": 1, "title": "Material preso", "scenario": "Um material fica preso em uma máquina durante a produção.", "options": ["Alcançar o material enquanto a máquina desacelera.", "Puxar com uma ferramenta improvisada.", "Pedir a um colega que observe o comando.", "Parar e seguir o procedimento de intervenção por pessoal autorizado."], "correct": 3, "explanation": "Desobstruções exigem procedimento seguro e pessoas autorizadas."}, {"id": "nr12-03", "region": "Segurança de máquinas", "nr": "NR-12", "level": 2, "title": "Máquina recém-instalada", "scenario": "Uma equipe começará a usar uma máquina nova.", "options": ["Receber orientação sobre riscos, proteções e operação antes do uso.", "Começar com peças pequenas sem instrução.", "Copiar o jeito de operar da máquina antiga.", "Ignorar os avisos se o painel for intuitivo."], "correct": 0, "explanation": "Treinamento e orientação específicos ajudam a reconhecer os riscos da máquina."}, {"id": "nr12-04", "region": "Segurança de máquinas", "nr": "NR-12", "level": 2, "title": "Partida inesperada", "scenario": "Uma máquina inicia movimento sem comando esperado.", "options": ["Prosseguir se o movimento parar sozinho.", "Repetir o comando para confirmar a falha.", "Interromper o uso e solicitar avaliação da anormalidade.", "Bloquear apenas o aviso sonoro."], "correct": 2, "explanation": "Uma partida inesperada indica condição que precisa ser avaliada antes de continuar."}, {"id": "nr12-05", "region": "Segurança de máquinas", "nr": "NR-12", "level": 3, "title": "Intertravamento incômodo", "scenario": "Uma proteção com intertravamento está causando interrupções frequentes.", "options": ["Desativar a função até a próxima manutenção.", "Comunicar a falha e solicitar correção sem contornar a proteção.", "Manter a proteção aberta e trabalhar mais devagar.", "Transferir a tarefa a quem conhece melhor a máquina."], "correct": 1, "explanation": "Interrupções devem ser investigadas sem neutralizar a função de segurança."}, {"id": "nr1-01", "region": "Gestão de riscos", "nr": "NR-1", "level": 1, "title": "Risco percebido", "scenario": "Uma pessoa identifica um risco que não havia sido discutido na equipe.", "options": ["Esperar a inspeção anual.", "Avisar apenas se ocorrer um acidente.", "Comunicar o risco para que seja avaliado e controlado.", "Resolver sozinha, sem registrar."], "correct": 2, "explanation": "A comunicação de riscos permite avaliar e atualizar as medidas de prevenção."}, {"id": "nr1-02", "region": "Gestão de riscos", "nr": "NR-1", "level": 1, "title": "Processo alterado", "scenario": "Uma nova etapa é adicionada ao processo de trabalho.", "options": ["Reavaliar os riscos e as medidas de prevenção relacionados à mudança.", "Manter a avaliação antiga sem análise.", "Aguardar a primeira falha para agir.", "Deixar cada turno decidir seu próprio controle."], "correct": 0, "explanation": "Mudanças no processo podem criar riscos novos ou alterar os existentes."}, {"id": "nr1-03", "region": "Gestão de riscos", "nr": "NR-1", "level": 2, "title": "Quase acidente", "scenario": "Uma caixa cai perto de uma pessoa, sem causar lesão.", "options": ["Ignorar porque ninguém se feriu.", "Punir a pessoa mais próxima imediatamente.", "Retomar a tarefa sem discutir a causa.", "Registrar e analisar o ocorrido para prevenir repetição."], "correct": 3, "explanation": "Um quase acidente oferece informação útil para melhorar as medidas de prevenção."}, {"id": "nr1-04", "region": "Gestão de riscos", "nr": "NR-1", "level": 2, "title": "Equipe nova", "scenario": "Novas pessoas chegam a um setor com riscos específicos.", "options": ["Entregar tarefas sem contextualização.", "Garantir orientação sobre riscos, medidas e procedimentos antes da atividade.", "Pedir que leiam os avisos depois do turno.", "Supor que a experiência anterior basta."], "correct": 1, "explanation": "Quem inicia uma atividade precisa conhecer seus riscos e controles."}, {"id": "nr1-05", "region": "Gestão de riscos", "nr": "NR-1", "level": 3, "title": "Equipes simultâneas", "scenario": "Duas equipes executarão atividades no mesmo espaço e seus planos podem interferir entre si.", "options": ["Deixar cada equipe trabalhar isoladamente.", "Priorizar apenas a equipe que chegou primeiro.", "Coordenar as atividades e revisar riscos e controles compartilhados.", "Resolver conflitos apenas se surgir um incidente."], "correct": 2, "explanation": "A coordenação evita que uma atividade introduza riscos para a outra."}];
+// Motor sem DOM para ser incorporado ao <script> do index.html.
+const GAME_W = 960;
+const GAME_H = 600;
+const PLAYER_RADIUS = 17;
+const INTERACT_RADIUS = 57;
+
+const REGION_MARKERS = [
+  { x: 120, y: 125 }, { x: 480, y: 135 }, { x: 840, y: 125 },
+  { x: 155, y: 455 }, { x: 805, y: 455 },
+];
+
+const REGIONS = [
+  { name: 'Escritório Administrativo', nr: 'NR-17', color: '#74dbe8', floor: '#142c45', object: 'MESA', obstacles: [
+    { x: 220, y: 220, w: 135, h: 72 }, { x: 605, y: 220, w: 135, h: 72 },
+    { x: 270, y: 365, w: 108, h: 66 }, { x: 582, y: 365, w: 108, h: 66 },
+  ], markers: REGION_MARKERS },
+  { name: 'Fábrica de Produção', nr: 'NR-6', color: '#ffcd76', floor: '#383047', object: 'POSTO', obstacles: [
+    { x: 205, y: 210, w: 140, h: 95 }, { x: 615, y: 210, w: 140, h: 95 },
+    { x: 310, y: 355, w: 112, h: 72 }, { x: 538, y: 355, w: 112, h: 72 },
+  ], markers: REGION_MARKERS },
+  { name: 'Depósito Logístico', nr: 'NR-11', color: '#9fe3a7', floor: '#233b42', object: 'ESTOQUE', obstacles: [
+    { x: 250, y: 195, w: 88, h: 230 }, { x: 622, y: 195, w: 88, h: 230 },
+    { x: 400, y: 280, w: 160, h: 58 },
+  ], markers: REGION_MARKERS },
+  { name: 'Setor Elétrico', nr: 'NR-10', color: '#a8b7ff', floor: '#202849', object: 'PAINEL', obstacles: [
+    { x: 205, y: 190, w: 122, h: 102 }, { x: 633, y: 190, w: 122, h: 102 },
+    { x: 310, y: 360, w: 108, h: 74 }, { x: 542, y: 360, w: 108, h: 74 },
+  ], markers: REGION_MARKERS },
+  { name: 'Área Industrial', nr: 'NR-12', color: '#f4a997', floor: '#3d2b40', object: 'MÁQUINA', obstacles: [
+    { x: 215, y: 210, w: 145, h: 96 }, { x: 600, y: 210, w: 145, h: 96 },
+    { x: 405, y: 290, w: 150, h: 62 },
+  ], markers: REGION_MARKERS },
+  { name: 'Central de Segurança', nr: 'NR-1', color: '#dfb5ff', floor: '#302c4b', object: 'CENTRAL', obstacles: [
+    { x: 230, y: 205, w: 132, h: 94 }, { x: 598, y: 205, w: 132, h: 94 },
+    { x: 310, y: 367, w: 105, h: 60 }, { x: 545, y: 367, w: 105, h: 60 },
+  ], markers: REGION_MARKERS },
+];
+
+const DIFFICULTIES = {
+  recruit: { label: 'Recruta da Segurança', seconds: 170, speed: 260, zoneDamage: 1.8 },
+  agent: { label: 'Agente de Prevenção', seconds: 135, speed: 245, zoneDamage: 2.6 },
+  expert: { label: 'Especialista em NRs', seconds: 105, speed: 230, zoneDamage: 3.4 },
+};
+
+function createGameState(config = {}) {
+  const difficulty = DIFFICULTIES[config.difficulty] ? config.difficulty : 'recruit';
+  const selected = Array.isArray(config.selectedRegions)
+    ? [...new Set(config.selectedRegions.filter(n => Number.isInteger(n) && n >= 0 && n < REGIONS.length))]
+    : [];
+  const regions = selected.length ? selected : REGIONS.map((_, i) => i);
+  const duration = Number.isFinite(config.duration) && config.duration >= 20
+    ? config.duration : DIFFICULTIES[difficulty].seconds;
+  return {
+    difficulty, regions, duration, regionIndex: 0,
+    player: { x: GAME_W / 2, y: GAME_H - 50, r: PLAYER_RADIUS },
+    identified: Object.fromEntries(regions.map(n => [n, Array(5).fill(false)])),
+    completed: Object.fromEntries(regions.map(n => [n, Array(5).fill(false)])),
+    firstTry: Object.fromEntries(regions.map(n => [n, Array(5).fill(true)])),
+    score: 0, security: 100, risksCorrected: 0,
+    attempts: 0, correctAnswers: 0, errors: [],
+    elapsed: 0, regionElapsed: 0, timeLeft: duration,
+    completedRegions: 0, status: 'playing', lastEvent: null,
+  };
+}
+
+function currentRegion(state) { return state.regions[state.regionIndex]; }
+function currentLayout(state) { return REGIONS[currentRegion(state)]; }
+function missionsDone(state) { return state.completed[currentRegion(state)].filter(Boolean).length; }
+function canExit(state) { return state.status === 'playing' && missionsDone(state) === 5; }
+function safeRadius(state) { return 690 - Math.min(1, state.regionElapsed / state.duration) * 460; }
+
+function circleHitsRect(x, y, r, rect) {
+  const nearestX = Math.max(rect.x, Math.min(x, rect.x + rect.w));
+  const nearestY = Math.max(rect.y, Math.min(y, rect.y + rect.h));
+  return (x - nearestX) ** 2 + (y - nearestY) ** 2 < r ** 2;
+}
+
+function moveAxis(player, amount, axis, obstacles) {
+  const candidate = { ...player, [axis]: Math.max(player.r + 15, Math.min((axis === 'x' ? GAME_W : GAME_H) - player.r - 15, player[axis] + amount)) };
+  return obstacles.some(rect => circleHitsRect(candidate.x, candidate.y, candidate.r, rect)) ? player : candidate;
+}
+
+function updateGame(state, input = { x: 0, y: 0 }, dt = 0) {
+  if (state.status !== 'playing') return state;
+  const seconds = Math.max(0, Math.min(Number.isFinite(dt) ? dt : 0, 0.07));
+  const dx = Number.isFinite(input.x) ? input.x : 0;
+  const dy = Number.isFinite(input.y) ? input.y : 0;
+  const norm = Math.max(1, Math.hypot(dx, dy));
+  const speed = DIFFICULTIES[state.difficulty].speed;
+  const obstacles = currentLayout(state).obstacles;
+  let player = moveAxis(state.player, dx / norm * speed * seconds, 'x', obstacles);
+  player = moveAxis(player, dy / norm * speed * seconds, 'y', obstacles);
+  const timeLeft = Math.max(0, state.timeLeft - seconds);
+  const regionElapsed = state.regionElapsed + seconds;
+  const distance = Math.hypot(player.x - GAME_W / 2, player.y - GAME_H / 2);
+  const radius = 690 - Math.min(1, regionElapsed / state.duration) * 460;
+  const damage = distance > radius ? DIFFICULTIES[state.difficulty].zoneDamage * seconds : 0;
+  const security = Math.max(0, state.security - damage);
+  let next = { ...state, player, timeLeft, regionElapsed, elapsed: state.elapsed + seconds, security, lastEvent: null };
+  if (security <= 0 || timeLeft <= 0) return { ...next, status: 'lost', lastEvent: security <= 0 ? 'security' : 'time' };
+  if (canExit(next) && Math.hypot(player.x - GAME_W / 2, player.y - 55) < 55) {
+    const bonus = Math.min(300, Math.round(300 * timeLeft / state.duration));
+    next = { ...next, score: next.score + 500 + bonus, completedRegions: next.completedRegions + 1 };
+    if (next.regionIndex + 1 >= next.regions.length) return { ...next, status: 'won', lastEvent: 'victory' };
+    return {
+      ...next, regionIndex: next.regionIndex + 1,
+      player: { x: GAME_W / 2, y: GAME_H - 50, r: PLAYER_RADIUS },
+      regionElapsed: 0, timeLeft: state.duration, lastEvent: 'region',
+    };
+  }
+  return next;
+}
+
+function nearestMission(state) {
+  if (state.status !== 'playing') return -1;
+  const region = currentRegion(state);
+  let nearest = -1;
+  let nearestDistance = INTERACT_RADIUS;
+  REGIONS[region].markers.forEach((point, index) => {
+    if (state.completed[region][index]) return;
+    const distance = Math.hypot(state.player.x - point.x, state.player.y - point.y);
+    if (distance < nearestDistance) { nearest = index; nearestDistance = distance; }
+  });
+  return nearest;
+}
+
+function identifyMission(state, index) {
+  const region = currentRegion(state);
+  if (state.status !== 'playing' || nearestMission(state) !== index) return state;
+  if (state.identified[region][index]) return state;
+  return {
+    ...state, score: state.score + 100,
+    identified: { ...state.identified, [region]: state.identified[region].map((value, i) => i === index || value) },
+    lastEvent: 'identified',
+  };
+}
+
+function answerMission(state, index, isCorrect) {
+  const region = currentRegion(state);
+  if (state.status !== 'playing' || !state.identified[region][index] || state.completed[region][index]) return state;
+  const attempts = state.attempts + 1;
+  if (!isCorrect) {
+    const security = Math.max(0, state.security - 10);
+    const key = `${region}-${index}`;
+    return {
+      ...state, attempts, security,
+      firstTry: { ...state.firstTry, [region]: state.firstTry[region].map((value, i) => i === index ? false : value) },
+      errors: state.errors.includes(key) ? state.errors : [...state.errors, key],
+      status: security <= 0 ? 'lost' : 'playing', lastEvent: security <= 0 ? 'security' : 'incorrect',
+    };
+  }
+  return {
+    ...state, attempts, correctAnswers: state.correctAnswers + 1,
+    score: state.score + 200 + (state.firstTry[region][index] ? 150 : 0),
+    risksCorrected: state.risksCorrected + 1,
+    completed: { ...state.completed, [region]: state.completed[region].map((value, i) => i === index || value) },
+    lastEvent: 'correct',
+  };
+}
+
+// Interface, desenho e controles. Este trecho é incorporado ao index.html.
+(() => {
+  'use strict';
+  const $ = selector => document.querySelector(selector);
+  const home = $('#home');
+  const gameScreen = $('#game-screen');
+  const canvas = $('#arena');
+  const ctx = canvas.getContext('2d');
+  const map = $('#minimap');
+  const mapCtx = map.getContext('2d');
+  const overlay = $('#overlay');
+  const panel = $('#panel-content');
+  const closeButton = $('#close-panel');
+  const toast = $('#toast');
+  const keys = new Set();
+  const touches = new Set();
+  const storageKey = 'nr-battle-royale-ranking-v1';
+  const settings = { difficulty: 'recruit', duration: 0, selectedRegions: REGIONS.map((_, i) => i), audio: false };
+  let state = null;
+  let agentName = '';
+  let panelMode = '';
+  let missionIndex = -1;
+  let lastFrame = performance.now();
+  let toastTimer = 0;
+  let resultSaved = false;
+  let audioContext = null;
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
+  }
+  function notify(message) {
+    toast.textContent = message;
+    toast.classList.remove('hidden');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.add('hidden'), 3100);
+  }
+  function sound(frequency = 520) {
+    if (!settings.audio) return;
+    try {
+      audioContext ||= new (window.AudioContext || window.webkitAudioContext)();
+      const osc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      osc.type = 'sine'; osc.frequency.value = frequency;
+      gain.gain.setValueAtTime(0.045, audioContext.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.13);
+      osc.connect(gain); gain.connect(audioContext.destination);
+      osc.start(); osc.stop(audioContext.currentTime + 0.14);
+    } catch { /* Áudio opcional. */ }
+  }
+  function showPanel(content, mode, closeable = true) {
+    panel.innerHTML = content;
+    panelMode = mode;
+    overlay.classList.remove('hidden');
+    closeButton.hidden = !closeable;
+    const focusTarget = panel.querySelector('button, input, select') || closeButton;
+    if (focusTarget) focusTarget.focus();
+  }
+  function closePanel() {
+    if (panelMode === 'end') return;
+    if (state && state.status !== 'playing' && (panelMode === 'ranking' || panelMode === 'review')) { finish(); return; }
+    overlay.classList.add('hidden');
+    panelMode = '';
+    missionIndex = -1;
+    lastFrame = performance.now();
+  }
+  function getRanking() {
+    try {
+      const data = JSON.parse(localStorage.getItem(storageKey) || '[]');
+      if (!Array.isArray(data)) return [];
+      return data.filter(item => item && typeof item.name === 'string' && Number.isFinite(item.score) && Number.isFinite(item.time) && Number.isFinite(item.missions))
+        .slice(0, 100).sort((a, b) => b.score - a.score || a.time - b.time);
+    } catch { return []; }
+  }
+  function saveResult() {
+    if (!state || resultSaved) return;
+    resultSaved = true;
+    const entry = { name: agentName, score: state.score, risks: state.risksCorrected, missions: state.risksCorrected,
+      regions: state.completedRegions, time: Math.round(state.elapsed), accuracy: state.attempts ? Math.round(100 * state.correctAnswers / state.attempts) : 0,
+      medal: medal(), date: new Date().toISOString(), outcome: state.status === 'won' ? 'Vitória' : 'Derrota' };
+    try { localStorage.setItem(storageKey, JSON.stringify([...getRanking(), entry].sort((a, b) => b.score - a.score || a.time - b.time).slice(0, 50))); }
+    catch { notify('Não foi possível salvar o ranking neste navegador.'); }
+  }
+  function medal() {
+    if (!state) return '—';
+    if (state.status !== 'won') return 'Em treinamento';
+    const accuracy = state.attempts ? state.correctAnswers / state.attempts : 0;
+    return accuracy >= .9 ? 'Ouro' : accuracy >= .7 ? 'Prata' : 'Bronze';
+  }
+  function formatTime(seconds) {
+    const total = Math.max(0, Math.ceil(seconds));
+    return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
+  }
+  function rankHtml() {
+    const rank = getRanking();
+    return `<p class="eyebrow">RESULTADOS DESTE NAVEGADOR</p><h2 id="panel-title">Ranking local</h2>
+      <p>Estes resultados ficam neste dispositivo; não são sincronizados com outros computadores.</p>
+      ${rank.length ? `<div class="rank-list">${rank.map((item, i) => `<div class="rank-row"><b>${i + 1}. ${escapeHtml(item.name)}</b><span>${item.score} pts · ${item.missions} missões · ${formatTime(item.time)} · ${escapeHtml(item.medal || '—')}</span></div>`).join('')}</div>` : '<p>Ainda não há partidas salvas.</p>'}
+      <div class="panel-actions"><button class="btn btn-primary" data-action="csv" ${rank.length ? '' : 'disabled'}>EXPORTAR CSV</button><button class="btn btn-ghost" data-action="close">VOLTAR</button></div>`;
+  }
+  function exportCsv() {
+    const rank = getRanking();
+    if (!rank.length) return notify('Ainda não há resultados para exportar.');
+    const safe = value => {
+      const raw = String(value ?? '');
+      const protectedValue = /^[=+\-@]/.test(raw) ? "'" + raw : raw;
+      return `"${protectedValue.replace(/"/g, '""')}"`;
+    };
+    const header = ['Posição', 'Nome', 'Pontuação', 'Riscos corrigidos', 'Missões', 'Regiões', 'Tempo (s)', 'Acertos (%)', 'Medalha', 'Resultado', 'Data'];
+    const rows = rank.map((item, i) => [i + 1, item.name, item.score, item.risks, item.missions, item.regions, item.time, item.accuracy, item.medal, item.outcome, item.date]);
+    const csv = '\ufeff' + [header, ...rows].map(row => row.map(safe).join(';')).join('\r\n');
+    const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    const a = document.createElement('a'); a.href = url; a.download = 'nr-battle-royale-resultados.csv'; a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+  }
+  function howtoHtml() {
+    return `<p class="eyebrow">GUIA DE MISSÃO</p><h2 id="panel-title">Como jogar</h2>
+      <p>Você é um agente de prevenção. Explore cada região, aproxime-se dos símbolos <b>!</b> e escolha a medida mais segura para cada situação.</p>
+      <ul><li><b>Computador:</b> mova-se com WASD ou as setas. Pressione E para interagir e P para pausar.</li>
+      <li><b>Celular:</b> use o controle de direção e o botão Interagir ou Corrigir risco.</li>
+      <li>Resolva cinco missões por região. Depois, alcance o portal no topo do mapa.</li>
+      <li>A zona segura diminui com o tempo. Fora dela, a barra de segurança cai. A zona é uma mecânica simbólica: no trabalho real, afaste-se de situações perigosas.</li>
+      <li>Uma resposta incorreta reduz 10 pontos de segurança. Você pode tentar novamente.</li></ul>
+      <p>Conteúdo para aprendizagem em sala. A educadora deve revisar as situações conforme as normas vigentes. <a href="https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/seguranca-e-saude-no-trabalho/ctpp-nrs/normas-regulamentadoras-nrs" target="_blank" rel="noopener noreferrer">Consultar NRs no MTE</a>.</p>
+      <div class="panel-actions"><button class="btn btn-primary" data-action="close">ENTENDI</button></div>`;
+  }
+  function settingsHtml() {
+    return `<p class="eyebrow">MODO EDUCADOR</p><h2 id="panel-title">Configurações</h2>
+      <label for="difficulty">Dificuldade</label><select id="difficulty">${Object.entries(DIFFICULTIES).map(([key, item]) => `<option value="${key}" ${settings.difficulty === key ? 'selected' : ''}>${escapeHtml(item.label)}</option>`).join('')}</select>
+      <label for="duration">Tempo por região</label><select id="duration"><option value="0" ${settings.duration === 0 ? 'selected' : ''}>Padrão da dificuldade</option><option value="90" ${settings.duration === 90 ? 'selected' : ''}>1 min 30 s</option><option value="120" ${settings.duration === 120 ? 'selected' : ''}>2 min</option><option value="180" ${settings.duration === 180 ? 'selected' : ''}>3 min</option><option value="240" ${settings.duration === 240 ? 'selected' : ''}>4 min</option></select>
+      <p class="settings-label">Normas trabalhadas</p><div class="nr-grid">${REGIONS.map((region, i) => `<label class="nr-check"><input type="checkbox" name="region" value="${i}" ${settings.selectedRegions.includes(i) ? 'checked' : ''}> ${region.nr} · ${escapeHtml(region.name)}</label>`).join('')}</div>
+      <label class="nr-check"><input id="audio-toggle" type="checkbox" ${settings.audio ? 'checked' : ''}> Efeitos sonoros</label>
+      <p>Para projetar, use o modo tela cheia do navegador. O ranking e a exportação CSV contêm apenas resultados deste dispositivo.</p>
+      <div class="panel-actions"><button class="btn btn-primary" data-action="save-settings">SALVAR</button><button class="btn btn-ghost" data-action="close">CANCELAR</button></div>`;
+  }
+  function startGame() {
+    const name = $('#nickname').value.trim();
+    if (!name) { $('#nickname').focus(); notify('Informe seu nome ou apelido para jogar.'); return; }
+    agentName = name.slice(0, 22);
+    state = createGameState(settings);
+    resultSaved = false;
+    missionIndex = -1;
+    keys.clear(); touches.clear();
+    home.classList.add('hidden');
+    gameScreen.classList.remove('hidden');
+    overlay.classList.add('hidden');
+    panelMode = '';
+    lastFrame = performance.now();
+    updateHud();
+    notify(`Missão iniciada: ${currentLayout(state).name}.`);
+    sound(650);
+  }
+  function goHome() {
+    state = null;
+    panelMode = '';
+    overlay.classList.add('hidden');
+    gameScreen.classList.add('hidden');
+    home.classList.remove('hidden');
+    keys.clear(); touches.clear();
+    $('#nickname').focus();
+  }
+  function missionFor(region, index) {
+    return MISSIONS.filter(item => item.nr === REGIONS[region].nr)[index];
+  }
+  function missionHtml(index, feedback = '') {
+    const mission = missionFor(currentRegion(state), index);
+    return `<p class="eyebrow">MISSÃO ${index + 1}/5 · ${escapeHtml(mission.nr)} · NÍVEL ${mission.level}</p>
+      <h2 id="panel-title">${escapeHtml(mission.title)}</h2><p>${escapeHtml(mission.scenario)}</p>
+      <div class="choices">${mission.options.map((option, i) => `<button class="choice" data-answer="${i}"><b>${'ABCD'[i]}</b> ${escapeHtml(option)}</button>`).join('')}</div>
+      ${feedback}<p class="mission-note">Escolha a decisão mais segura. Você poderá rever erros ao fim da partida.</p>`;
+  }
+  function interact() {
+    if (!state || state.status !== 'playing' || panelMode) return;
+    const index = nearestMission(state);
+    if (index < 0) { notify(canExit(state) ? 'Siga para o portal no topo do mapa.' : 'Aproxime-se de um marcador de missão.'); return; }
+    missionIndex = index;
+    state = identifyMission(state, index);
+    updateHud();
+    showPanel(missionHtml(index), 'mission');
+    sound(610);
+  }
+  function answer(index) {
+    if (panelMode !== 'mission' || missionIndex < 0 || !state) return;
+    const mission = missionFor(currentRegion(state), missionIndex);
+    const correct = index === mission.correct;
+    state = answerMission(state, missionIndex, correct);
+    updateHud();
+    if (state.status === 'lost') { finish(); return; }
+    const choiceButtons = [...panel.querySelectorAll('[data-answer]')];
+    choiceButtons.forEach(button => { button.disabled = true; if (Number(button.dataset.answer) === index) button.classList.add(correct ? 'correct' : 'wrong'); });
+    const feedback = document.createElement('div');
+    feedback.className = `answer-feedback ${correct ? 'correct' : 'wrong'}`;
+    feedback.innerHTML = `<b>${correct ? '✓ RISCO CONTROLADO' : '⚠ REPENSE A DECISÃO'}</b><p>${escapeHtml(mission.explanation)}</p>
+      <button class="btn btn-primary" data-action="${correct ? 'continue' : 'retry'}">${correct ? 'CONTINUAR' : 'TENTAR NOVAMENTE'}</button>`;
+    panel.append(feedback);
+    if (correct) { state = { ...state, security: Math.min(100, state.security + 5) }; sound(750); }
+    else sound(210);
+    updateHud();
+  }
+  function updateHud() {
+    if (!state) return;
+    const region = currentLayout(state);
+    $('#hud-name').textContent = agentName;
+    $('#hud-region').textContent = `${state.regionIndex + 1}/${state.regions.length}`;
+    $('#hud-score').textContent = state.score.toLocaleString('pt-BR');
+    $('#hud-time').textContent = formatTime(state.timeLeft);
+    $('#hud-health').textContent = `${Math.ceil(state.security)}%`;
+    $('#health-fill').style.width = `${state.security}%`;
+    $('#health-fill').style.background = state.security < 30 ? '#ff6483' : '#62eecb';
+    $('#region-nr').textContent = region.nr;
+    $('#region-title').textContent = region.name;
+    $('#region-progress').textContent = `${missionsDone(state)}/5 missões`;
+    $('#zone-fill').style.width = `${Math.max(0, 100 * state.timeLeft / state.duration)}%`;
+    const near = nearestMission(state);
+    $('#canvas-hint').textContent = near >= 0 ? `Pressione E ou INTERAGIR: missão ${near + 1}` : canExit(state) ? 'Portal liberado! Vá ao topo do mapa.' : 'WASD ou setas para mover · E para interagir';
+  }
+  function finish() {
+    if (!state || (state.status !== 'won' && state.status !== 'lost')) return;
+    saveResult();
+    const won = state.status === 'won';
+    const accuracy = state.attempts ? Math.round(100 * state.correctAnswers / state.attempts) : 0;
+    showPanel(`<p class="eyebrow">${won ? 'MISSÃO CONCLUÍDA' : 'FIM DE PARTIDA'}</p><h2 id="panel-title">${won ? 'BOOYAH! Segurança em primeiro lugar!' : 'A missão terminou. Continue aprendendo!'}</h2>
+      <p>${won ? 'Você controlou os riscos de todas as regiões selecionadas.' : state.lastEvent === 'time' ? 'O tempo da região terminou.' : 'A barra de segurança chegou a zero.'}</p>
+      <div class="result-grid"><div><b>${state.score.toLocaleString('pt-BR')}</b><span>PONTOS</span></div><div><b>${state.risksCorrected}</b><span>RISCOS CORRIGIDOS</span></div><div><b>${accuracy}%</b><span>ACERTOS</span></div><div><b>${formatTime(state.elapsed)}</b><span>TEMPO</span></div></div>
+      <p>Regiões concluídas: ${state.completedRegions}/${state.regions.length} · Medalha: <strong>${medal()}</strong></p>
+      <div class="panel-actions"><button class="btn btn-primary" data-action="restart">JOGAR NOVAMENTE</button><button class="btn btn-ghost" data-action="ranking">VER RANKING</button><button class="btn btn-ghost" data-action="review">REVISAR ERROS</button><button class="btn btn-ghost" data-action="home">INÍCIO</button></div>`, 'end', false);
+    sound(won ? 880 : 190);
+  }
+  function reviewHtml() {
+    const errors = state ? state.errors : [];
+    return `<p class="eyebrow">APRENDA COM CADA TENTATIVA</p><h2 id="panel-title">Revisão dos erros</h2>
+      ${errors.length ? errors.map(key => {
+        const [region, index] = key.split('-').map(Number);
+        const mission = missionFor(region, index);
+        return `<div class="review-item"><b>${escapeHtml(mission.nr)} · ${escapeHtml(mission.title)}</b><p>${escapeHtml(mission.scenario)}</p><p><strong>Decisão recomendada:</strong> ${escapeHtml(mission.options[mission.correct])}</p><p>${escapeHtml(mission.explanation)}</p></div>`;
+      }).join('') : '<p>Você não errou nenhuma missão nesta partida.</p>'}
+      <div class="panel-actions"><button class="btn btn-primary" data-action="end-again">VOLTAR AO RESULTADO</button></div>`;
+  }
+
+  function roundedRect(x, y, w, h, r, fill) {
+    ctx.fillStyle = fill;
+    ctx.beginPath(); ctx.roundRect(x, y, w, h, r); ctx.fill();
+  }
+  function drawArena() {
+    if (!state) return;
+    const region = currentLayout(state);
+    const background = ctx.createLinearGradient(0, 0, GAME_W, GAME_H);
+    background.addColorStop(0, region.floor); background.addColorStop(1, '#0b1533');
+    ctx.fillStyle = background; ctx.fillRect(0, 0, GAME_W, GAME_H);
+    ctx.strokeStyle = '#ffffff0c'; ctx.lineWidth = 1;
+    for (let x = 0; x < GAME_W; x += 48) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, GAME_H); ctx.stroke(); }
+    for (let y = 0; y < GAME_H; y += 48) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(GAME_W, y); ctx.stroke(); }
+    for (let i = 0; i < 25; i++) {
+      const x = (i * 211 + currentRegion(state) * 37) % GAME_W;
+      const y = (i * 137 + currentRegion(state) * 67) % GAME_H;
+      ctx.fillStyle = '#ffffff16'; ctx.beginPath(); ctx.arc(x, y, i % 3 ? 1.4 : 2.2, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.save(); ctx.shadowColor = region.color; ctx.shadowBlur = 21;
+    for (const obstacle of region.obstacles) {
+      roundedRect(obstacle.x + 5, obstacle.y + 11, obstacle.w, obstacle.h, 12, '#02071d99');
+      roundedRect(obstacle.x, obstacle.y, obstacle.w, obstacle.h, 10, '#0d1939');
+      roundedRect(obstacle.x + 4, obstacle.y + 4, obstacle.w - 8, obstacle.h - 12, 8, region.color + '53');
+      ctx.fillStyle = region.color; ctx.fillRect(obstacle.x + 11, obstacle.y + 10, obstacle.w - 22, 4);
+      ctx.fillStyle = '#e5efff'; ctx.font = '700 13px Arial'; ctx.textAlign = 'center';
+      ctx.fillText(region.object, obstacle.x + obstacle.w / 2, obstacle.y + obstacle.h / 2 + 5);
+    }
+    ctx.restore();
+    ctx.save();
+    ctx.fillStyle = '#b72a7590';
+    ctx.beginPath(); ctx.rect(0, 0, GAME_W, GAME_H); ctx.arc(GAME_W / 2, GAME_H / 2, safeRadius(state), 0, Math.PI * 2, true); ctx.fill('evenodd');
+    ctx.strokeStyle = '#ff65ad'; ctx.lineWidth = 4; ctx.setLineDash([12, 9]);
+    ctx.beginPath(); ctx.arc(GAME_W / 2, GAME_H / 2, safeRadius(state), 0, Math.PI * 2); ctx.stroke();
+    ctx.restore();
+    region.markers.forEach((point, i) => {
+      const done = state.completed[currentRegion(state)][i];
+      const near = nearestMission(state) === i;
+      ctx.save(); ctx.translate(point.x, point.y);
+      ctx.shadowColor = done ? '#5af0bb' : '#ffc95d'; ctx.shadowBlur = 20;
+      ctx.fillStyle = done ? '#206b66' : near ? '#f5ae39' : '#bd6b36';
+      ctx.beginPath(); ctx.arc(0, 0, near ? 24 : 20, 0, Math.PI * 2); ctx.fill();
+      ctx.shadowBlur = 0; ctx.strokeStyle = '#fff8da'; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.arc(0, 0, near ? 24 : 20, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = '#fff'; ctx.font = '900 21px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(done ? '✓' : '!', 0, 1);
+      ctx.font = '700 12px Arial'; ctx.fillStyle = '#e7efff'; ctx.fillText(`${i + 1}`, 0, 35);
+      ctx.restore();
+    });
+    ctx.save(); ctx.translate(GAME_W / 2, 48);
+    ctx.shadowColor = canExit(state) ? '#68f6cf' : '#677294'; ctx.shadowBlur = 23;
+    roundedRect(-43, -28, 86, 50, 10, canExit(state) ? '#1ba68c' : '#394563');
+    ctx.shadowBlur = 0; ctx.fillStyle = '#fff'; ctx.font = '800 13px Arial'; ctx.textAlign = 'center'; ctx.fillText(canExit(state) ? 'SAÍDA ↑' : 'BLOQUEADO', 0, 3); ctx.restore();
+    const p = state.player;
+    ctx.save(); ctx.translate(p.x, p.y); ctx.shadowColor = '#5ef8fa'; ctx.shadowBlur = 23;
+    ctx.fillStyle = '#1bceec'; ctx.beginPath(); ctx.arc(0, 5, 19, 0, Math.PI * 2); ctx.fill();
+    ctx.shadowBlur = 0; ctx.fillStyle = '#0b2751'; ctx.beginPath(); ctx.arc(0, -5, 12, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#a5fff1'; ctx.beginPath(); ctx.arc(0, -7, 7, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#ffda69'; ctx.beginPath(); ctx.moveTo(0, -25); ctx.lineTo(-8, -11); ctx.lineTo(8, -11); ctx.fill();
+    ctx.restore();
+    ctx.fillStyle = '#ffffffc9'; ctx.font = '900 15px Arial'; ctx.textAlign = 'left'; ctx.fillText(`${region.nr}  ·  ${region.name.toUpperCase()}`, 22, 34);
+    drawMinimap();
+  }
+  function drawMinimap() {
+    if (!state) return;
+    const sx = map.width / GAME_W, sy = map.height / GAME_H;
+    mapCtx.fillStyle = '#101d3b'; mapCtx.fillRect(0, 0, map.width, map.height);
+    mapCtx.strokeStyle = '#f57ab1'; mapCtx.lineWidth = 1.5;
+    mapCtx.beginPath(); mapCtx.ellipse(map.width / 2, map.height / 2, safeRadius(state) * sx, safeRadius(state) * sy, 0, 0, Math.PI * 2); mapCtx.stroke();
+    mapCtx.fillStyle = '#50627d';
+    for (const o of currentLayout(state).obstacles) mapCtx.fillRect(o.x * sx, o.y * sy, o.w * sx, o.h * sy);
+    currentLayout(state).markers.forEach((m, i) => { mapCtx.fillStyle = state.completed[currentRegion(state)][i] ? '#65edc4' : '#ffce69'; mapCtx.fillRect(m.x * sx - 2, m.y * sy - 2, 4, 4); });
+    mapCtx.fillStyle = '#fff'; mapCtx.beginPath(); mapCtx.arc(state.player.x * sx, state.player.y * sy, 3.5, 0, Math.PI * 2); mapCtx.fill();
+  }
+  function frame(now) {
+    const dt = Math.min(.07, (now - lastFrame) / 1000 || 0);
+    lastFrame = now;
+    if (state) {
+      if (state.status === 'playing' && panelMode === '') {
+        const previousRegion = state.regionIndex;
+        const x = Number(keys.has('ArrowRight') || keys.has('d') || touches.has('right')) - Number(keys.has('ArrowLeft') || keys.has('a') || touches.has('left'));
+        const y = Number(keys.has('ArrowDown') || keys.has('s') || touches.has('down')) - Number(keys.has('ArrowUp') || keys.has('w') || touches.has('up'));
+        state = updateGame(state, { x, y }, dt);
+        if (state.regionIndex !== previousRegion) { notify(`Região concluída! Próxima: ${currentLayout(state).name}.`); sound(780); }
+        if (state.status !== 'playing') finish();
+        updateHud();
+      }
+      drawArena();
+    }
+    requestAnimationFrame(frame);
+  }
+
+  $('#play').addEventListener('click', startGame);
+  $('#nickname').addEventListener('keydown', event => { if (event.key === 'Enter') startGame(); });
+  document.querySelectorAll('[data-open]').forEach(button => button.addEventListener('click', () => {
+    const mode = button.dataset.open;
+    showPanel(mode === 'howto' ? howtoHtml() : mode === 'ranking' ? rankHtml() : settingsHtml(), mode);
+  }));
+  closeButton.addEventListener('click', closePanel);
+  overlay.addEventListener('click', event => { if (event.target === overlay) closePanel(); });
+  panel.addEventListener('click', event => {
+    const answerButton = event.target.closest('[data-answer]');
+    if (answerButton) { answer(Number(answerButton.dataset.answer)); return; }
+    const button = event.target.closest('[data-action]');
+    if (!button) return;
+    switch (button.dataset.action) {
+      case 'close': closePanel(); break;
+      case 'csv': exportCsv(); break;
+      case 'save-settings': {
+        const selected = [...panel.querySelectorAll('input[name="region"]:checked')].map(item => Number(item.value));
+        if (!selected.length) { notify('Selecione pelo menos uma NR.'); return; }
+        settings.selectedRegions = selected;
+        settings.difficulty = panel.querySelector('#difficulty').value;
+        settings.duration = Number(panel.querySelector('#duration').value);
+        settings.audio = panel.querySelector('#audio-toggle').checked;
+        closePanel(); notify('Configurações salvas.'); break;
+      }
+      case 'continue': closePanel(); if (canExit(state)) notify('Cinco missões concluídas. Vá ao portal no topo!'); break;
+      case 'retry': showPanel(missionHtml(missionIndex), 'mission'); break;
+      case 'restart': startGame(); break;
+      case 'home': goHome(); break;
+      case 'ranking': showPanel(rankHtml(), 'ranking'); break;
+      case 'review': showPanel(reviewHtml(), 'review'); break;
+      case 'end-again': finish(); break;
+    }
+  });
+  $('#pause').addEventListener('click', () => {
+    if (!state || state.status !== 'playing') return;
+    showPanel(`<p class="eyebrow">MISSÃO EM ESPERA</p><h2 id="panel-title">Pausa estratégica</h2><p>Seu progresso nesta partida continua aqui.</p><div class="panel-actions"><button class="btn btn-primary" data-action="close">CONTINUAR</button><button class="btn btn-ghost" data-action="home">SAIR DA PARTIDA</button></div>`, 'pause');
+  });
+  $('#mobile-interact').addEventListener('click', interact);
+  $('#mobile-correct').addEventListener('click', interact);
+  document.querySelectorAll('[data-dir]').forEach(button => {
+    const dir = button.dataset.dir;
+    button.addEventListener('pointerdown', event => { event.preventDefault(); button.setPointerCapture(event.pointerId); touches.add(dir); });
+    for (const name of ['pointerup', 'pointercancel', 'lostpointercapture']) button.addEventListener(name, () => touches.delete(dir));
+  });
+  window.addEventListener('keydown', event => {
+    if (!state || state.status !== 'playing') return;
+    const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'e', 'p', 'w', 'a', 's', 'd'].includes(key) && panelMode === '') event.preventDefault();
+    if (key === 'Escape' && panelMode) { closePanel(); return; }
+    if (panelMode) return;
+    if (key === 'e' && !event.repeat) interact();
+    else if (key === 'p' && !event.repeat) $('#pause').click();
+    keys.add(key);
+  });
+  window.addEventListener('keyup', event => keys.delete(event.key.length === 1 ? event.key.toLowerCase() : event.key));
+  window.addEventListener('blur', () => { keys.clear(); touches.clear(); if (state && state.status === 'playing' && !panelMode) $('#pause').click(); });
+  requestAnimationFrame(frame);
+})();
+
+  </script>
+</body>
 </html>

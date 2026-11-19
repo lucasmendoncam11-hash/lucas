@@ -1,0 +1,16 @@
+NR BATTLE ROYALE 3D — PROTÓTIPO PARA WINDOWS
+
+Extraia todo o conteúdo deste arquivo ZIP para uma pasta e abra NRBattleRoyale.exe.
+O arquivo NRBattleRoyale.pck deve ficar na mesma pasta do executável.
+
+Controles:
+WASD ou setas — mover o agente
+E — investigar uma estação próxima ou concluir no portal central
+1 a 4 — escolher uma resposta
+Esc — pausar/continuar
+Enter — começar/recomeçar
+
+Objetivo: resolver as seis estações de segurança e voltar ao portal central antes que o tempo e a barra de segurança acabem.
+
+Este é um protótipo 3D original e compacto. Não é uma produção AAA com o volume de recursos de Fortnite.
+O conteúdo educativo deve ser discutido com a educadora e confrontado com as NRs oficiais vigentes.
